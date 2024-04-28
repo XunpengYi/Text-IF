@@ -1,5 +1,5 @@
 # [CVPR 2024] Text-IF: Leveraging Semantic Text Guidance for Degradation-Aware and Interactive Image Fusion
-### Paper | [Arxiv](https://arxiv.org/pdf/2403.16387.pdf) | [Code](https://github.com/xunpengyi/LLIEFormer)
+### Paper | [Arxiv](https://arxiv.org/pdf/2403.16387.pdf) | [Code](https://github.com/XunpengYi/Text-IF)
 [![arXiv](https://img.shields.io/badge/arxiv-paper-179bd3)](https://arxiv.org/pdf/2403.16387.pdf) 
 
 **Text-IF: Leveraging Semantic Text Guidance for Degradation-Aware and Interactive Image Fusion**
