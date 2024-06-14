@@ -135,7 +135,7 @@ class Cross_attention(nn.Module):
         qkv_A = self.qkv_A(x_A).view(batch, n_head, head_dim * 3, height, width)
         query_A, key_A, value_A = qkv_A.chunk(3, dim=2)
 
-        x_B = self.norm_A(x_B)
+        x_B = self.norm_B(x_B)
         qkv_B = self.qkv_B(x_B).view(batch, n_head, head_dim * 3, height, width)
         query_B, key_B, value_B = qkv_B.chunk(3, dim=2)
 

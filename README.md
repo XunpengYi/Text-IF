@@ -41,9 +41,10 @@ You can also refer to [MFNet](https://www.mi.t.utokyo.ac.jp/static/projects/mil_
 ```
 
 ## 3. Pretrain Weights
-The pretrain weights for general image fusion performance is at [Google Drive](https://drive.google.com/file/d/146jH_-6oquoEKc1HnMoWxLcu9mwjWACF/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1wrDfkocRE4aa_mX-PQG_kA) (code: nh9x).
+The pretrain weights for general image fusion performance is at [Google Drive](https://drive.google.com/file/d/1B_xOgS3SYIiTRGX2sZJ-0Vckbc76yXDQ/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1iMtAUaetvSS4Upf8BWIE8w) (code: nh9y).
 
-The pretrain weights for text guidance image fusion performance is at [Google Drive](https://drive.google.com/file/d/1p4Isv-lTqIMpY4io_jB8fFa696mAq_XF/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/11gsYyxQOjhzSX0rJ9SA2-w) (code: cgrv).
+The pretrain weights for text guidance image fusion performance is at [Google Drive](https://drive.google.com/file/d/13yYzMUV_EXu-y2Yb82rDy0MmzPcGqGCY/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1VdedSkychRRxkUP-fbRiYw) (code: cgrm).
+
 
 ## 4. Testing
 For general image fusion performance comparison, please do not input the text with degradation prompt to ensure relative fairness.
@@ -56,6 +57,8 @@ CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_w
 
 # LLVIP
 CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/simple_fusion.pth" --dataset_path "./dataset/LLVIP/eval" --input_text "This is the infrared and visible image fusion task."  --save_path "./results"
+
+# Some researchers have reported better performance using the text "This is the infrared-visible light fusion task.".
 ```
 
 For text guidance image fusion, the existing model supports hints for low light, overexposure, low contrast, and noise. Feel free to use it.
@@ -87,13 +90,6 @@ The training code will be released with the EMS-Full dataset in June for researc
 ## Citation
 If you find our work or dataset useful for your research, please cite our paper. 
 ```
-@article{yi2024text,
-  title={Text-IF: Leveraging Semantic Text Guidance for Degradation-Aware and Interactive Image Fusion},
-  author={Yi, Xunpeng and Xu, Han and Zhang, Hao and Tang, Linfeng and Ma, Jiayi},
-  journal={arXiv preprint arXiv:2403.16387},
-  year={2024}
-}
-
 @inproceedings{yi2024text,
   title={Text-IF: Leveraging Semantic Text Guidance for Degradation-Aware and Interactive Image Fusion},
   author={Yi, Xunpeng and Xu, Han and Zhang, Hao and Tang, Linfeng and Ma, Jiayi},
