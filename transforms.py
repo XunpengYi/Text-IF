@@ -124,25 +124,3 @@ class ToTensor(object):
         target_gt = F.to_tensor(target_gt)
         image_full = F.to_tensor(image_full)
         return image, target, image_gt, target_gt, image_full
-
-
-class Normalize(object):
-    def __init__(self, mean, std, mean_t, std_t):
-        self.mean = mean
-        self.std = std
-        self.mean_t = mean_t
-        self.std_t = std_t
-
-    def __call__(self, image, target):
-        image = F.normalize(image, mean=self.mean, std=self.std)
-        target = F.normalize(target, mean=self.mean_t, std=self.std_t)
-        return image, target
-
-class reNormalize(object):
-    def __init__(self, mean, std):
-        self.mean = mean
-        self.std = std
-
-    def __call__(self, image):
-        image = F.normalize(image, mean=-self.mean/self.std, std=1/self.std)
-        return image

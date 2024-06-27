@@ -1,6 +1,5 @@
 # [CVPR 2024] Text-IF: Leveraging Semantic Text Guidance for Degradation-Aware and Interactive Image Fusion
-### Paper | [Arxiv](https://arxiv.org/pdf/2403.16387.pdf) | [Code](https://github.com/XunpengYi/Text-IF)
-[![arXiv](https://img.shields.io/badge/arxiv-paper-179bd3)](https://arxiv.org/pdf/2403.16387.pdf) 
+### [Paper](https://openaccess.thecvf.com/content/CVPR2024/papers/Yi_Text-IF_Leveraging_Semantic_Text_Guidance_for_Degradation-Aware_and_Interactive_Image_CVPR_2024_paper.pdf) | [Arxiv](https://arxiv.org/pdf/2403.16387.pdf) | [Code](https://github.com/XunpengYi/Text-IF) 
 
 **Text-IF: Leveraging Semantic Text Guidance for Degradation-Aware and Interactive Image Fusion**
 Xunpeng Yi, Han Xu, Hao Zhang, Linfeng Tang and Jiayi Ma in CVPR 2024
@@ -25,8 +24,9 @@ If you have the device with the lower version of CUDA, you can try to install a 
 
 EMS Dataset: Enhanced Multi-Spectral Various Scenarios for Degradation-Aware Image Fusion
 
-Recently, researchers have actively carried out research on enhanced image fusion involving degradation perception. We construct a fusion dataset benchmark with multiple degradation types on exist dataset, which implicates multiple explicit degradations on the sources images. We are now applied for the licence.
-The link of the full dataset (EMS-Full) will be available in June expectedly.
+Recently, researchers have actively carried out research on enhanced image fusion involving degradation perception. We construct a fusion dataset benchmark with multiple degradation types on exist dataset, which implicates multiple explicit degradations on the sources images. 
+
+The dataset is now available in [here](https://github.com/XunpengYi/EMS). Thanks to the MFNet, RoadScene/FLIR_aligned, LLVIP contributors.
 
 You can also refer to [MFNet](https://www.mi.t.utokyo.ac.jp/static/projects/mil_multispectral/), [RoadScene](https://github.com/hanna-xu/RoadScene)/[FLIR_aligned](https://adas-dataset-v2.flirconservator.com/#downloadguide), [LLVIP](https://github.com/bupt-ai-cz/LLVIP) to prepare your data. You should list your dataset as followed rule:
 ```bash
@@ -85,7 +85,36 @@ From left to right are the infrared image, visible image, and the fusion image o
 ![Gallery](assert/FLIR_RS__01932.png)
 
 ## 5. Train
-The training code will be released with the EMS-Full dataset in June for research purposes only. 
+Please prepare the training data as required from the EMS dataset. 
+```bash
+    dataset/
+        dataset/
+            train/
+              # The infrared and visible images are low quality by default.
+              type_degradation_1/
+                  Infrared/
+                  Infrared_gt/
+                  Visible/
+                  Visible_gt/
+                  text/
+              type_degradation_2/
+                  Infrared/
+                  Infrared_gt/
+                  Visible/
+                  Visible_gt/
+                  text/
+              type_degradation_3/
+                  ...
+            eval/
+                Infrared/
+                Visible/
+                # You can enter the text while running the code, the text folder is optional here.
+```
+Modify the text prompt path in the `scripts/utils.py` to the corresponding configuration file and the dataset path in the `train_fusion.py`.
+After that, run the following command:
+```shell
+python train_fusion.py
+```
 
 ## Citation
 If you find our work or dataset useful for your research, please cite our paper. 
