@@ -50,15 +50,13 @@ The pretrain weights for text guidance image fusion performance is at [Google Dr
 For general image fusion performance comparison, please do not input the text with degradation prompt to ensure relative fairness.
 ```shell
 # MFNet
-CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/simple_fusion.pth" --dataset_path "./dataset/MFNet/eval" --input_text "This is the infrared and visible image fusion task." --save_path "./results"
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/simple_fusion.pth" --dataset_path "./dataset/MFNet/eval" --input_text "This is the infrared and visible light image fusion task." --save_path "./results"
 
 # RoadScene
-CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/simple_fusion.pth" --dataset_path "./dataset/RoadScene/eval" --input_text "This is the infrared and visible image fusion task."  --save_path "./results"
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/simple_fusion.pth" --dataset_path "./dataset/RoadScene/eval" --input_text "This is the infrared and visible light image fusion task."  --save_path "./results"
 
 # LLVIP
-CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/simple_fusion.pth" --dataset_path "./dataset/LLVIP/eval" --input_text "This is the infrared and visible image fusion task."  --save_path "./results"
-
-# Some researchers have reported better performance using the text "This is the infrared-visible light fusion task.".
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/simple_fusion.pth" --dataset_path "./dataset/LLVIP/eval" --input_text "This is the infrared and visible light image fusion task."  --save_path "./results"
 ```
 
 For text guidance image fusion, the existing model supports hints for low light, overexposure, low contrast, and noise. Feel free to use it.
