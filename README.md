@@ -73,8 +73,37 @@ CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_w
 # Noise
 CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "We're working on the fusion of infrared and visible images, with special consideration for the noise degradation affecting the infrared captures." --save_path "./results"
 ```
-Stay tuned for more powerful model support with more tasks and descriptions in the future.
 
+### News: Text-IF supports handling more degradation (all types in EMS) and more powerful text prompts.
+The model weights for more degradation have now been made publicly available in [Google Drive](https://drive.google.com/file/d/1jstLiOp-ZBppz_vZhyG55YeUYFLyOdrP/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1wydIlgurftN5tyCa6Nt7mg) (code: rwth).
+```shell
+# vis Low light
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "In the context of infrared-visible image fusion, visible images are susceptible to extremely low light degradation." --save_path "./results"
+
+# vis Overexposure
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "We're tackling the infrared-visible image fusion challenge, dealing with visible images suffering from overexposure degradation." --save_path "./results"
+
+# vis Random noise
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "The goal is to effectively fuse infrared and visible light images, mitigating the random noise present in visible images." --save_path "./results"
+
+# vis Haze
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "We're tackling the fusion of infrared and visible light images, specifically focusing on haze issues in the visible images." --save_path "./results"
+
+# vis Rain
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "This is the infrared-visible light fusion task, where visible images are affected by rain degradation." --save_path "./results"
+
+# vis Blur
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "This task involves integrating infrared and visible light images, focusing on the degradation caused by blur in visible images." --save_path "./results"
+
+# ir Low contrast
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "In this challenge, we're addressing the fusion of infrared and visible images, with a specific focus on the low contrast degradation in the infrared images." --save_path "./results"
+
+# ir Stripe noise
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "This pertains to the fusion of infrared and visible light images, with an emphasis on addressing stripe noise degradation in the infrared images." --save_path "./results"
+
+# ir Random noise
+CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "We're working on the fusion of infrared and visible images, with special consideration for the noise degradation affecting the infrared captures." --save_path "./results"
+```
 ### Gallery
 
 From left to right are the infrared image, visible image, and the fusion image obtained by Text-IF with the text guidance.
