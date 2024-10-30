@@ -39,11 +39,12 @@ You can also refer to [MFNet](https://www.mi.t.utokyo.ac.jp/static/projects/mil_
                 Infrared/
                 Visible/
 ```
+⭐⭐ News: We released a dataset containing more diverse degradations (EMS-Full) for the degradation-robust image fusion task. All manual restored data and simulated degradation code are available. For more details, please refer to [EMS](https://github.com/XunpengYi/EMS) dataset.
 
-## 3. Pretrain Weights
-The pretrain weights for general image fusion performance is at [Google Drive](https://drive.google.com/file/d/1B_xOgS3SYIiTRGX2sZJ-0Vckbc76yXDQ/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1iMtAUaetvSS4Upf8BWIE8w) (code: nh9y).
+## 3. Pretrained Weights
+The pretrained weights for general image fusion performance is at [Google Drive](https://drive.google.com/file/d/1B_xOgS3SYIiTRGX2sZJ-0Vckbc76yXDQ/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1iMtAUaetvSS4Upf8BWIE8w) (code: nh9y).
 
-The pretrain weights for text guidance image fusion performance is at [Google Drive](https://drive.google.com/file/d/13yYzMUV_EXu-y2Yb82rDy0MmzPcGqGCY/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1VdedSkychRRxkUP-fbRiYw) (code: cgrm).
+The pretrained weights for text guidance image fusion performance is at [Google Drive](https://drive.google.com/file/d/13yYzMUV_EXu-y2Yb82rDy0MmzPcGqGCY/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1VdedSkychRRxkUP-fbRiYw) (code: cgrm).
 
 
 ## 4. Testing
@@ -74,8 +75,10 @@ CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_w
 CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "We're working on the fusion of infrared and visible images, with special consideration for the noise degradation affecting the infrared captures." --save_path "./results"
 ```
 
-### News: Text-IF supports handling more degradation (all types in EMS) and more powerful text prompts.
-The model weights for more degradation have now been made publicly available in [Google Drive](https://drive.google.com/file/d/1jstLiOp-ZBppz_vZhyG55YeUYFLyOdrP/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1wydIlgurftN5tyCa6Nt7mg) (code: rwth).
+### News: Text-IF supports handling more degradation (all types in EMS) and more powerful text prompts. 
+The model weights for more degradation have now been made publicly available in [Google Drive](https://drive.google.com/file/d/1jstLiOp-ZBppz_vZhyG55YeUYFLyOdrP/view?usp=sharing) | [Baidu Drive](https://pan.baidu.com/s/1wydIlgurftN5tyCa6Nt7mg) (code: rwth). 
+
+We only recommend using this weight when handling a large number of degradations. In general, we recommend using the previously mentioned at `Pretrained Weights` for text guidance image fusion.
 ```shell
 # vis Low light
 CUDA_VISIBLE_DEVICES=0 python test_from_dataset.py  --weights_path "pretrained_weights/text_fusion_power.pth" --dataset_path "./dataset/your_dataset/eval" --input_text "In the context of infrared-visible image fusion, visible images are susceptible to extremely low light degradation." --save_path "./results"
