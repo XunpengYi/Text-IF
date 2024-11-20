@@ -7,7 +7,7 @@ class fusion_loss(nn.Module):
     def __init__(self):
         super(fusion_loss, self).__init__()
         self.loss_func_ssim = L_SSIM(window_size=48)
-        self.loss_func_Grad = L_Grad()
+        self.loss_func_Grad = L_Grad_position()
         self.loss_func_Max = L_Intensity()
         self.loss_func_color = L_color()
 
