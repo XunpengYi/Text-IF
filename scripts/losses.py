@@ -22,7 +22,7 @@ class fusion_prompt_loss(nn.Module):
             elif task[index] == "over_exposure":
                 loss, ssim_loss, max_loss, color_loss, grad_loss = self.fusion_loss(self.get_images(image_A, index), self.get_images(image_B, index),
                                                                                       self.get_images(image_fused, index), max_ratio=4, consist_ratio=4,
-                                                                                      ssim_ratio=0, ir_compose=0, text_ratio=2, max_mode="l2", consist_mode="l2")
+                                                                                      ssim_ratio=0, ir_compose=1, text_ratio=2, max_mode="l2", consist_mode="l2")
             elif task[index] == "ir_low_contrast":
                 loss, ssim_loss, max_loss, color_loss, grad_loss = self.fusion_loss(self.get_images(image_A, index), self.get_images(image_B, index),
                                                                                       self.get_images(image_fused, index), max_ratio=8, consist_ratio=1)
