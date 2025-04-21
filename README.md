@@ -114,7 +114,7 @@ From left to right are the infrared image, visible image, and the fusion image o
 ![Gallery](assert/LLVIP__010007.png)
 ![Gallery](assert/FLIR_RS__01932.png)
 
-## 5. Train
+## 5. Training
 Please prepare the training data as required from the EMS dataset. 
 ```bash
     dataset/
