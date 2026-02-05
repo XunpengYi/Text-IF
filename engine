@@ -1,0 +1,158 @@
+import os
+import sys
+import random
+import clip
+import torch
+from tqdm import tqdm
+import numpy as np
+import cv2
+
+
+def train_one_epoch(model, model_clip, optimizer, lr_scheduler, data_loader, device, epoch):
+    model.train()
+    model_clip.eval()
+
+    accu_total_loss = torch.zeros(1).to(device)
+    accu_ssim_loss = torch.zeros(1).to(device)
+    accu_max_loss = torch.zeros(1).to(device)
+    accu_color_loss = torch.zeros(1).to(device)
+    accu_text_loss = torch.zeros(1).to(device)
+    accu_consistency_loss = torch.zeros(1).to(device)
+
+    optimizer.zero_grad()
+
+    data_loader = tqdm(data_loader, file=sys.stdout)
+    for step, data in enumerate(data_loader):
+
+        vis, ir, text_vis, text_ir, name = data
+        text_vis = clip.tokenize(text_vis).to(device)  # (b,77)
+        text_ir = clip.tokenize(text_ir).to(device)  # (b,77)
+
+        if torch.cuda.is_available():
+            vis = vis.to(device)
+            ir = ir.to(device)
+
+        loss_total, fus_img = model(vis, ir, text_vis, text_ir)
+
+        loss, loss_ssim, loss_max, loss_color, loss_text, loss_consistency = loss_total
+        loss.backward()
+        accu_total_loss += loss.detach()
+        accu_ssim_loss += loss_ssim.detach()
+        accu_max_loss += loss_max.detach()
+        accu_color_loss += loss_color.detach()
+        accu_text_loss += loss_text.detach()
+        accu_consistency_loss += loss_consistency.detach()
+
+        lr = optimizer.param_groups[0]["lr"]
+        data_loader.desc = "[train epoch {}] loss: {:.3f}  ssim loss: {:.3f}  max loss: {:.3f}  color loss: {:.3f}  text loss: {:.3f}  consistency loss: {:.3f}  lr: {:.6f}".format \
+            (epoch, accu_total_loss.item() / (step + 1), accu_ssim_loss.item() / (step + 1), accu_max_loss.item() /
+             (step + 1), accu_color_loss.item() / (step + 1), accu_text_loss.item() / (step + 1), accu_consistency_loss.item() / (step + 1), lr)
+
+        if not torch.isfinite(loss):
+            print('WARNING: non-finite loss, ending training ', loss)
+            sys.exit(1)
+
+        optimizer.step()
+        lr_scheduler.step()
+        optimizer.zero_grad()
+
+    return accu_total_loss.item() / (step + 1), accu_ssim_loss.item() / (step + 1), accu_max_loss.item() / \
+                (step + 1), accu_color_loss.item() / (step + 1), accu_text_loss.item() / (step + 1), accu_consistency_loss.item() / (step + 1), lr
+
+
+@torch.no_grad()
+def evaluate(model, data_loader, device, epoch, lr, filefold_path):
+
+    model.eval()
+    accu_total_loss = torch.zeros(1).to(device)
+    accu_ssim_loss = torch.zeros(1).to(device)
+    accu_max_loss = torch.zeros(1).to(device)
+    accu_color_loss = torch.zeros(1).to(device)
+    accu_text_loss = torch.zeros(1).to(device)
+    accu_consistency_loss = torch.zeros(1).to(device)
+
+    save_epoch = 1
+    save_length = 60
+    cnt = 0
+    save_RGB_fuse = True
+
+    if epoch % save_epoch == 0:
+        evalfold_path = os.path.join(filefold_path, str(epoch))
+        if os.path.exists(evalfold_path) is False:
+            os.makedirs(evalfold_path)
+
+    data_loader = tqdm(data_loader, file=sys.stdout)
+    for step, data in enumerate(data_loader):
+        vis, ir, text_vis, text_ir, name = data
+        text_vis = clip.tokenize(text_vis).to(device)  # (b,77)
+        text_ir = clip.tokenize(text_ir).to(device)  # (b,77)
+
+        if torch.cuda.is_available():
+            vis = vis.to(device)
+            ir = ir.to(device)
+
+        loss_total, fus_img = model(vis, ir, text_vis, text_ir)
+
+        if epoch % save_epoch == 0:
+            if cnt <= save_length:
+                fused_img_Y = tensor2numpy(fus_img)
+                img_vis = tensor2numpy(vis)
+                img_ir = tensor2numpy(ir)
+                save_pic(fused_img_Y, evalfold_path, str(name[0]))
+                if save_RGB_fuse == True:
+                    save_pic(img_vis, evalfold_path, str(name[0]) + "vis")
+                    save_pic(img_ir, evalfold_path, str(name[0]) + "ir")
+                cnt += 1
+
+        loss, loss_ssim, loss_max, loss_color, loss_text, loss_consistency = loss_total
+
+        accu_total_loss += loss.detach()
+        accu_ssim_loss += loss_ssim.detach()
+        accu_max_loss += loss_max.detach()
+        accu_color_loss += loss_color.detach()
+        accu_text_loss += loss_text.detach()
+        accu_consistency_loss += loss_consistency.detach()
+
+        data_loader.desc = "[val epoch {}] loss: {:.3f}  ssim loss: {:.3f}  max loss: {:.3f}  color loss: {:.3f}  text loss: {:.3f}  consistency loss: {:.3f}  lr: {:.6f}".format(
+            epoch, accu_total_loss.item() / (step + 1),
+            accu_ssim_loss.item() / (step + 1), accu_max_loss.item() / (step + 1), accu_color_loss.item() / (step + 1),
+            accu_text_loss.item() / (step + 1), accu_consistency_loss.item() / (step + 1), lr)
+
+    return accu_total_loss.item() / (step + 1), accu_ssim_loss.item() / (step + 1), accu_max_loss.item() / (
+                step + 1), accu_color_loss.item() / (step + 1), accu_text_loss.item() / (step + 1), accu_consistency_loss.item() / (step + 1)
+
+
+def create_lr_scheduler(optimizer,
+                        num_step: int,
+                        epochs: int,
+                        warmup=True,
+                        warmup_epochs=1,
+                        warmup_factor=1e-3):
+    assert num_step > 0 and epochs > 0
+    if warmup is False:
+        warmup_epochs = 0
+
+    def f(x):
+        if warmup is True and x <= (warmup_epochs * num_step):
+            alpha = float(x) / (warmup_epochs * num_step)
+            return warmup_factor * (1 - alpha) + alpha
+        else:
+            return (1 - (x - warmup_epochs * num_step) / ((epochs - warmup_epochs) * num_step)) ** 0.9
+
+    return torch.optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=f)
+
+
+def save_pic(outputpic, path, index : str):
+    outputpic[outputpic > 1.] = 1
+    outputpic[outputpic < 0.] = 0
+    outputpic = cv2.UMat(outputpic).get()
+    outputpic = cv2.normalize(outputpic, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_32F)
+    outputpic=outputpic[:, :, ::-1]
+    save_path = os.path.join(path, index + ".png")
+    cv2.imwrite(save_path, outputpic)
+
+
+def tensor2numpy(R_tensor):
+    R = R_tensor.squeeze(0).cpu().detach().numpy()
+    R = np.transpose(R, [1, 2, 0])
+    return R
